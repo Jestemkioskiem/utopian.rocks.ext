@@ -3,6 +3,11 @@ body {
 	height: 375px;
 }
 
+.top-bar img{
+	height: 96px;
+	width: auto;
+}
+
 .top-bar{
 	text-align: center;
 }
