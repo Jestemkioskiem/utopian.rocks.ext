@@ -33,6 +33,6 @@ function displayButton(status){ //placeholder function
 		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
 	}
 
-	$('.Voting').append(`<img src=${iconUrl}></img>`) 
+	$('.TagList__horizontal').append(`<img src=${iconUrl}></img>`) 
 	console.log(status)
 }
