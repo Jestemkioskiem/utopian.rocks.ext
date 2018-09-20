@@ -15,24 +15,21 @@ $(document).ready(function(){
 })
 
 function displayButton(status){ //placeholder function
-	let iconUrl;
+	let iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // Need SVG for this to work.
+
 	if(status === 'unreviewed'){
-		console.log(status)
-		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+		$("#status-icon").css("color: grey")
 	}
 	else if(status === 'pending'){
-		console.log(status)
-		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+		$("#status-icon").css("color: orange")
 	}
 	else if(status === 'rejected'){
-		console.log(status)
-		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+		$("#status-icon").css("color: red")
 	}
 	else if(status === "voted"){
-		console.log(status)
-		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+		$("#status-icon").css("color: green")
 	}
 
-	$('.TagList__horizontal').prepend(`<img src=${iconUrl}></img>`) 
+	$('.TagList__horizontal').prepend(`<img id="status-icon" src="${iconUrl}></img>"`) 
 	console.log(status)
 }
