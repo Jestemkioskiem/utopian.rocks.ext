@@ -24,6 +24,9 @@ function linkStatus(url){ // Check the status of the contribution and return it.
 			if(data.voted_on === true){
 				result = "voted";
 			}
+			else if(data.status === "reviewed" && data.voted_on === false){
+				result = "rejected";
+			}
 			else{
 				result = data.status;
 			}

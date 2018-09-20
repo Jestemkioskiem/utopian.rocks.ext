@@ -4,7 +4,7 @@
   "name": "Utopian Rocks Extension",
   "version": "0.1.0",
   "description": "Foo",
-  "web_accessible_resources": ["*.png","*.PNG"],
+  "web_accessible_resources": ["src/*"],
 
   "permissions": ["tabs"],
 

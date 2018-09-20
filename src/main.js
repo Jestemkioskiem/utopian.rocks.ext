@@ -15,6 +15,24 @@ $(document).ready(function(){
 })
 
 function displayButton(status){ //placeholder function
-	//$('body').html(`<button>${status}</button>`)
+	let iconUrl;
+	if(status === 'unreviewed'){
+		console.log(status)
+		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+	}
+	else if(status === 'pending'){
+		console.log(status)
+		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+	}
+	else if(status === 'rejected'){
+		console.log(status)
+		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+	}
+	else if(status === "voted"){
+		console.log(status)
+		iconUrl = chrome.extension.getURL("src/icons/icon16.png"); // AMOS REPLACE THIS WITH SVG I DONT KNOW HOW SVGS WORK
+	}
+
+	$('.Voting').append(`<img src=${iconUrl}></img>`) 
 	console.log(status)
 }
