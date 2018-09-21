@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
  
-  "name": "Utopian Rocks Extension",
+  "name": "Utopian Rocks",
   "version": "0.1.0",
   "description": "Foo",
   "web_accessible_resources": ["src/*"],
@@ -13,13 +13,6 @@
     "48": "src/icons/icon48.png",
     "128": "src/icons/icon128.png"
   },
-
-  "browser_action": {
-    "default_icon": "src/icons/icon48.png",
-    "default_title": "Utopian Rocks",
-    "default_popup": "src/popup/popup.html",
-    "browser_style": true
-  },
   
   "content_scripts": [{
     "js" : ["src/third_party/jquery.js", "src/main.js"],
@@ -27,6 +20,6 @@
   }],
 
   "background": {
-    "scripts": [ "src/third_party/jquery.js", "src/background.js"]
+    "scripts": ["src/background.js", "src/third_party/jquery.js"]
   }
 }   

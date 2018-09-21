@@ -1,0 +1,19 @@
+#### Repository
+e.g. https://github.com/utopian-io/utopian.io
+
+#### Introduction
+Write a short overview of the post goal and content.
+
+#### Post Body
+Write the post in readable and presentable form by utilizing markdown to style the text.
+
+#### Resources
+Include links and references to resources used in the post.
+
+#### Series Backlinks
+If the post is not the first post in a series, link to the previous posts of the series.
+
+- [Example Blog Post A](https://steemit.com/utopian-io/@test-account/test-permlink)
+- [Example Blog Post B](https://steemit.com/utopian-io/@test-account/test-permlink)
+- [Example Blog Post C](https://steemit.com/utopian-io/@test-account/test-permlink)
+- [Example Blog Post D](https://steemit.com/utopian-io/@test-account/test-permlink)

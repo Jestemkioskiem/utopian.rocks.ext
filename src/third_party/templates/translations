@@ -1,0 +1,19 @@
+#### Repository
+e.g. https://github.com/utopian-io/utopian.io
+
+#### Project Details
+Describe the target project of your work, including your motivation to translate this particular projects, and what value it brings to the open source community.
+
+#### Contribution Specifications
+
+- Translation Overview
+Explain the purpose of the text translated, their applications and uses and include an overview of the work you’ve done.
+
+- Languages
+List the source and target languages in this contribution. Be sure to also provide some insight on your expertise and translation experience in these languages.
+
+- Word Count
+Present a number report of the volume of the work done (number of words translated). Be sure to exclude duplicate strings and static text (like links and code) from your count.
+
+### Proof of Authorship
+Please make sure your Crowdin username is the same as the Steem username or modifiy your Crowdin profile details to verify the authorship of those translations. Add a link to your Crowdin profile in this section.
