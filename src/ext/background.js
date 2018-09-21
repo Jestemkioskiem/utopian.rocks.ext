@@ -30,7 +30,7 @@ function linkStatus(url){ // Check the status of the contribution and return it.
 			else if(data.status === "reviewed" && data.voted_on === false){
 				result = "rejected";
 			}
-			else if(data.status === "unreviewed" && data.moderator !== undefined){
+			else if(data.status === "unreviewed" && data.moderator){
 				result = "underreview";
 			}
 			else{

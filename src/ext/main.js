@@ -13,7 +13,7 @@ function msgReceived(message, sender, sendResponse){
 
 $(document).ready(function(){ 
 	setTimeout(function(){
-		$('head').append(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL('src/style.css')}">`)
+		$('head').append(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL('src/ext/style.css')}">`)
 		$('body').append(`<script type="text/javascript" src="${chrome.extension.getURL('src/third_party/jquery.js')}"></script>`)
 		chrome.runtime.sendMessage({ // Send a request for the status of the contribution.
 			request: "status"
