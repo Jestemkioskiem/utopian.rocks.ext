@@ -26,6 +26,11 @@
 	text-transform: none;
 }
 
+#utopian-submit{
+    padding: 10px;
+    font-size: 0.8em;
+}
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */

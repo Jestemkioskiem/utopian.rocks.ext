@@ -4,7 +4,7 @@ function msgReceived(message, sender, sendResponse){
 		displayStatus(message) // placeholder function
 	}
 	if(message.url === "https://steemit.com/submit.html"){
-		displayUtopianTags(message.url)
+		displayUtopianAids(message.url)
 	}
 	else{
 		console.log("Unknown request")
@@ -21,7 +21,7 @@ $(document).ready(function(){
 	}, 2500)
 })
 
-function displayUtopianTags(url){
+function displayUtopianAids(url){
 	$('.ReplyEditor__body').after('<p id="utopian-tags">\
 	<strong>Select an Utopian-io category:</strong>\
 	<button id="analysis">analysis</button>, <button id="blog">blog</button>, <button id="bug-hunting">bug-hunting</button>,\
@@ -36,16 +36,28 @@ function displayUtopianTags(url){
 		<p>You\'re about to overwrite your changes with an Utopian Template.<br> Are you sure you want to continue?</p>\
 		<button id="templateOverwriteYes">Yes</button> <button id="templateOverwriteNo">No</button>')
 
+	$('body').append('<div id="steemConnectModal" class="modal"><div class="modal-content">\
+		<p>You\'re about to leave this page to sing in with SteemConnect.<br>\
+		Your draft will be saved by steemit.com and your post will be published by Utopian.<br><br>Are you sure you want to continue?</p>\
+		<button id="scModalYes">Yes</button> <button id="scModalNo">No</button>')
+
 	$('#analysis, #blog, #bug-hunting, #copywriting, #development, #documentation, #graphics, #ideas, #social, #translations, \
    	   #tutorials, #video-tutorials, #task-requests').click(function(){
    	   	console.log(this.textContent);
-	   	loadSelectedCategory(this.textContent);
-   })
+	   	loadTemplateModal(this.textContent);
+   	})
+    
+    $('button[tabindex=5]').after('<br><button type="submit" class="button" id="utopian-submit"><span title="Post with Utopian">\
+       Post with Utopian</span></button>')
+
+    $('#utopian-submit').click(function(){
+    	loadScModal();
+    })
 }
 
-function loadSelectedCategory(category){
+function loadTemplateModal(category){
 	if($('.dropzone textarea')[0].value === ""){
-		forceHTML();
+		forceTemplateHTML();
 	}
 	else{
 		let modal = $('#templateOverwriteModal');
@@ -56,16 +68,58 @@ function loadSelectedCategory(category){
 		})
 		$('#templateOverwriteYes').click(function(){
 			modal.hide();
-			forceHTML();
+			forceTemplateHTML();
 		})
 
 	}
 
-	function forceHTML(){
+	function forceTemplateHTML(){
 		$.get(chrome.extension.getURL(`src/third_party/templates/${category}`), function(data){
 			$('.dropzone textarea')[0].value = data;
 			$('input[name=category]')[0].value = `utopian-io ${category}`
 		})
+	}
+}
+
+function loadScModal(){
+	let modal = $('#steemConnectModal');
+	modal.show()
+
+	$('#scModalNo').click(function(){
+		modal.hide();
+	})
+
+	$('#scModalYes').click(function(){
+		let temp = gatherPostContent()
+		console.log(temp)
+		if(temp){
+			window.location.href = "https://google.com"
+		}
+		else(
+			alert("Your Title, Body or Tags are empty!")
+		)
+
+		chrome.runtime.sendMessage({ // Send a request for the status of the contribution.
+			request: "post_content",
+			content: gatherPostContent()
+		})
+	})
+}
+
+function gatherPostContent(){
+	let post = {
+		title: $('.ReplyEditor__title')[0].value,
+		body: $('.dropzone textarea')[0].value,
+		tags: $('input[name=category]')[0].value//,
+		//tip: 
+
+	}
+
+	if(post.body === "" || !post.tags === "" || post.title === ""){
+		return false;
+	}
+	else{
+		return post;
 	}
 }
 

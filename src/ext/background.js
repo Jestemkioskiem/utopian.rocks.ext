@@ -1,5 +1,6 @@
 chrome.runtime.onMessage.addListener(msgReceived); // Message listener
 function msgReceived(message, sender, sendResponse){
+	console.log(message)
 	if(message.request === "status"){
 		let msg = {
 			request: "status",
@@ -9,6 +10,9 @@ function msgReceived(message, sender, sendResponse){
 			url: sender.url
 		}
 		chrome.tabs.sendMessage(sender.tab.id, msg)
+	}
+	else if(message.request === "post_content"){
+		chrome.utopian_post = message.content
 	}
 	else{
 		console.log('Unknown request');
