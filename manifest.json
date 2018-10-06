@@ -6,7 +6,7 @@
   "description": "An easy solution for posting to Utopian from the steemit interface.",
   "web_accessible_resources": ["src/*"],
 
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "storage"],
 
   "icons": { 
     "16": "src/icons/icon16.png",
