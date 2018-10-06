@@ -15,10 +15,18 @@ $(document).ready(function(){
 	setTimeout(function(){
 		$('head').append(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL('src/ext/style.css')}">`)
 		$('body').append(`<script type="text/javascript" src="${chrome.extension.getURL('src/third_party/jquery.js')}"></script>`)
+	}, 2500)
+
+	if(window.location.href.includes('?access_token=')){
+		chrome.runtime.sendMessage({ // Send a request for the status of the contribution.
+			request: "token"
+		})
+	}
+	else{
 		chrome.runtime.sendMessage({ // Send a request for the status of the contribution.
 			request: "status"
 		})
-	}, 2500)
+	}
 })
 
 function displayUtopianAids(url){

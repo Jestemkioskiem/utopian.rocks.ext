@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(msgReceived); // Message listener
+chrome.runtime.onMessage.addListener(msgReceived); // Message listener.
 function msgReceived(message, sender, sendResponse){
 	console.log(message)
 	if(message.request === "status"){
@@ -11,8 +11,16 @@ function msgReceived(message, sender, sendResponse){
 		}
 		chrome.tabs.sendMessage(sender.tab.id, msg)
 	}
-	else if(message.request === "post_content"){
+
+	else if(message.request === "post_content"){ // Save the Content of the post for posting.
 		chrome.utopian_post = message.content
+	}
+
+	else if(message.request === "token"){ // Save the SteemConnect Token.
+		chrome.storage.local.set({
+            tokenExpire: Date.now() + 7 * 24 * 3600 * 1000,
+            sessionToken: sender.url.searchParams.get("access_token")
+        })
 	}
 	else{
 		console.log('Unknown request');
