@@ -1,8 +1,7 @@
 var sc2_api = sc2.Initialize({
 	app: 'utopian-ext.app',
 	callbackURL: 'https://join.utopian.io/',
-	accessToken: '',
-	scope: ['comment']
+	scope: ['comment','comment_options','custom_json','vote']
 });
 window.auth_link = sc2_api.getLoginURL()
 
@@ -46,11 +45,11 @@ $(document).ready(function(){
 function displayUtopianAids(url){
 	$('.ReplyEditor__body').after('<p id="utopian-tags">\
 	<strong>Select an Utopian-io category:</strong>\
-	<button id="analysis">analysis</button>, <button id="blog">blog</button>, <button id="bug-hunting">bug-hunting</button>,\
-	<button id="copywriting">copywriting</button>, <button id="development">development</button>,\
-	<button id="documentation">documentation</button>, <button id="graphics">graphics</button>, <button id="ideas">ideas</button>,\
-	<button id="social">social</button>, <button id="translations">translations</button>, <button id="tutorials">tutorials</button>,\
-	<button id="video-tutorials">video-tutorials</button>, <button id="task-requests">task-requests</button>;</p>')
+	<butt id="analysis">analysis</butt>, <butt id="blog">blog</butt>, <butt id="bug-hunting">bug-hunting</butt>,\
+	<butt id="copywriting">copywriting</butt>, <butt id="development">development</butt>,\
+	<butt id="documentation">documentation</butt>, <butt id="graphics">graphics</butt>, <butt id="ideas">ideas</butt>,\
+	<butt id="social">social</butt>, <butt id="translations">translations</butt>, <butt id="tutorials">tutorials</butt>,\
+	<butt id="video-tutorials">video-tutorials</butt>, <butt id="task-requests">task-requests</butt>;</p>')
 	
 	$('#utopian-tags').after('<a href="https://utopian.io/guidelines/">Utopian Guidelines</a>')
 
@@ -69,8 +68,8 @@ function displayUtopianAids(url){
 	   	loadTemplateModal(this.textContent);
    	})
     
-    $('input[name="category"]').after('<butt class="utopian-button" id="utopian-submit"><span title="Post with Utopian">\
-       <strong>Post with Utopian</strong></span></button><br>')
+    $('button[tabindex="4"]').before('<butt class="utopian-button" id="utopian-submit"><span title="Post with Utopian">\
+       <strong>Post with Utopian</strong></span></butt><br>')
 
     $('#utopian-submit').click(function(){
     	loadScModal();
@@ -172,55 +171,56 @@ function displayStatus(message){ //placeholder function
 function submitPost(content, token){
 	sc2_api.setAccessToken(token)
 
-	let user = sc2_api.me(function (err, res) {
-  		console.log(err, res)
+	sc2_api.me(function (err, user) {
+  		let permlink = content.title.toLowerCase()
+		.replace(/ /g,'-')
+    	.replace(/[^\w-]+/g,'');
+
+
+	    let tags = content.tags.split(' ')
+	    let title = content.title;
+	    let body = content.body;
+	    let sbd_percent = 10000;
+	    let maximumAcceptedPayout = '100000.000 SBD';
+
+	    let beneficiaries = []
+	    beneficiaries.push({
+	    	account:'utopian.pay',
+	    	weight: 100*5
+		})
+
+		let operations = [
+			['comment',
+	      	{
+		        parent_author: '',
+		        parent_permlink: tags[0],
+		        author: user.name,
+		        permlink: permlink,
+		        title: title,
+		        body: body,
+		        json_metadata : JSON.stringify({
+		          tags: tags,
+		          app: 'utopian-ext.app'
+		        })
+	      	}
+	      	],
+		    ['comment_options', {
+		        author: user.name,
+		        permlink: permlink,
+		        max_accepted_payout: maximumAcceptedPayout,
+		        percent_steem_dollars: parseInt(sbd_percent),
+		        allow_votes: true,
+		        allow_curation_rewards: true,
+		        extensions: [
+		        [0, {
+		          beneficiaries: beneficiaries
+		        }]
+		        ]
+		    }]
+		];
+
+		sc2_api.broadcast(operations, function(err, res){
+			console.log(err, res)
+		}
 	});
-
-	let permlink = content.title.toLowerCase()
-	.replace(/ /g,'-')
-    .replace(/[^\w-]+/g,'');
-
-    let tags = content.tags.split(' ')
-    let title = content.title;
-    let body = content.body;
-    let sbd_percent = 10000;
-    let maximumAcceptedPayout = '100000.000 SBD';
-
-    let beneficiaries = []
-    beneficiaries.push({
-    	account:'utopian.pay',
-    	weight: 100*5
-	})
-
-	let operations = [
-		['comment',
-      	{
-	        parent_author: '',
-	        parent_permlink: tags[0],
-	        author: user,
-	        permlink: permlink,
-	        title: title,
-	        body: body,
-	        json_metadata : JSON.stringify({
-	          tags: tags,
-	          app: 'utopian-ext.app'
-	        })
-      	}
-      	],
-	    ['comment_options', {
-	        author: user,
-	        permlink: permlink,
-	        max_accepted_payout: maximumAcceptedPayout,
-	        percent_steem_dollars: parseInt(sbd_percent),
-	        allow_votes: true,
-	        allow_curation_rewards: true,
-	        extensions: [
-	        [0, {
-	          beneficiaries: beneficiaries
-	        }]
-	        ]
-	    }]
-	    ];
-
-	sc2_api.broadcast(operations)
 }
