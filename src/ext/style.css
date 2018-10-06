@@ -7,6 +7,27 @@
 	display: inline-block;
 }
 
+.utopian-button{
+    text-decoration-style: solid;
+    background-color: #171F24;
+    text-transform: none;
+    color: rgb(255,255,255);
+    background-origin: padding-box;
+    border-radius: 0px;
+    border: solid 1px rgba(0, 0, 0, 0);
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px 0 rgba(0, 0, 0, 0), 2px 2px 0px 0px rgb(78, 91, 147);
+    transition-duration: 0.2s;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.utopian-button:hover{
+    background-color: rgb(78, 91, 147);
+    box-shadow: 0px 0px 0px 0 rgba(0, 0, 0, 0), 3px 3px 0px 0px #171F24;
+}
+
 #status-icon{
 	height: 64px;
 	width: 64px;
@@ -30,6 +51,7 @@
     padding: 10px;
     font-size: 0.8em;
 }
+
 
 .modal {
     display: none; /* Hidden by default */

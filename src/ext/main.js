@@ -1,21 +1,35 @@
-chrome.runtime.onMessage.addListener(msgReceived); // Message listener
-function msgReceived(message, sender, sendResponse){
-	if(message.request === "status"){ // Check what the purpose of the message is.
-		displayStatus(message) // placeholder function
-	}
-	if(message.url === "https://steemit.com/submit.html"){
-		displayUtopianAids(message.url)
-	}
-	else{
-		console.log("Unknown request")
-	}
-}
+var sc2_api = sc2.Initialize({
+	app: 'utopian-ext.app',
+	callbackURL: 'https://join.utopian.io/',
+	accessToken: '',
+	scope: ['comment']
+});
+window.auth_link = sc2_api.getLoginURL()
 
-$(document).ready(function(){ 
-	setTimeout(function(){
-		$('head').append(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL('src/ext/style.css')}">`)
-		$('body').append(`<script type="text/javascript" src="${chrome.extension.getURL('src/third_party/jquery.js')}"></script>`)
-	}, 2500)
+$(document).ready(function(){
+	chrome.runtime.onMessage.addListener(msgReceived); // Message listener
+		function msgReceived(message, sender, sendResponse){
+			if(message.request === "status"){ // Check what the purpose of the message is.
+				displayStatus(message) // placeholder function
+			}
+			else if(message.request === "broadcast"){
+
+				chrome.storage.local.get(function(result){
+					submitPost(result.content, result.sc2_token)
+				})
+			}
+			else{
+				console.log("Unknown request")
+			}
+
+			if(message.url === "https://steemit.com/submit.html"){
+				displayUtopianAids(message.url)
+			}
+		}
+
+	$('head').append(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL('src/ext/style.css')}">`)
+	$('body').append(`<script type="text/javascript" src="${chrome.extension.getURL('src/third_party/jquery.js')}"></script>\
+					  <script src="https://cdn.jsdelivr.net/npm/steemconnect@latest"></script>`)
 
 	if(window.location.href.includes('?access_token=')){
 		chrome.runtime.sendMessage({ // Send a request for the status of the contribution.
@@ -55,8 +69,8 @@ function displayUtopianAids(url){
 	   	loadTemplateModal(this.textContent);
    	})
     
-    $('button[tabindex=5]').after('<br><button type="submit" class="button" id="utopian-submit"><span title="Post with Utopian">\
-       Post with Utopian</span></button>')
+    $('input[name="category"]').after('<butt class="utopian-button" id="utopian-submit"><span title="Post with Utopian">\
+       <strong>Post with Utopian</strong></span></button><br>')
 
     $('#utopian-submit').click(function(){
     	loadScModal();
@@ -99,18 +113,14 @@ function loadScModal(){
 
 	$('#scModalYes').click(function(){
 		let temp = gatherPostContent()
-		console.log(temp)
 		if(temp){
-			window.location.href = "https://google.com"
+			window.location.href = window.auth_link
 		}
 		else(
 			alert("Your Title, Body or Tags are empty!")
 		)
 
-		chrome.runtime.sendMessage({ // Send a request for the status of the contribution.
-			request: "post_content",
-			content: gatherPostContent()
-		})
+		chrome.storage.local.set({content : gatherPostContent()})
 	})
 }
 
@@ -157,4 +167,60 @@ function displayStatus(message){ //placeholder function
 			$('#utopian-rocks-btn').after(`<p id="position">This post is under a review by <strong>${message.moderator}</strong>.</p>`)
 		}
 	}	
+}
+
+function submitPost(content, token){
+	sc2_api.setAccessToken(token)
+
+	let user = sc2_api.me(function (err, res) {
+  		console.log(err, res)
+	});
+
+	let permlink = content.title.toLowerCase()
+	.replace(/ /g,'-')
+    .replace(/[^\w-]+/g,'');
+
+    let tags = content.tags.split(' ')
+    let title = content.title;
+    let body = content.body;
+    let sbd_percent = 10000;
+    let maximumAcceptedPayout = '100000.000 SBD';
+
+    let beneficiaries = []
+    beneficiaries.push({
+    	account:'utopian.pay',
+    	weight: 100*5
+	})
+
+	let operations = [
+		['comment',
+      	{
+	        parent_author: '',
+	        parent_permlink: tags[0],
+	        author: user,
+	        permlink: permlink,
+	        title: title,
+	        body: body,
+	        json_metadata : JSON.stringify({
+	          tags: tags,
+	          app: 'utopian-ext.app'
+	        })
+      	}
+      	],
+	    ['comment_options', {
+	        author: user,
+	        permlink: permlink,
+	        max_accepted_payout: maximumAcceptedPayout,
+	        percent_steem_dollars: parseInt(sbd_percent),
+	        allow_votes: true,
+	        allow_curation_rewards: true,
+	        extensions: [
+	        [0, {
+	          beneficiaries: beneficiaries
+	        }]
+	        ]
+	    }]
+	    ];
+
+	sc2_api.broadcast(operations)
 }

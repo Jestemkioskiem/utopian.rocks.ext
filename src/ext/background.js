@@ -12,20 +12,22 @@ function msgReceived(message, sender, sendResponse){
 		chrome.tabs.sendMessage(sender.tab.id, msg)
 	}
 
-	else if(message.request === "post_content"){ // Save the Content of the post for posting.
-		chrome.utopian_post = message.content
-	}
-
 	else if(message.request === "token"){ // Save the SteemConnect Token.
-		chrome.storage.local.set({
-            tokenExpire: Date.now() + 7 * 24 * 3600 * 1000,
-            sessionToken: sender.url.searchParams.get("access_token")
-        })
+		let url = new URL(sender.url)
+        let token = url.searchParams.get("access_token")
+        chrome.storage.local.set({sc2_token: token})
+
+        let msg = {
+        	request: "broadcast",
+        }
+        chrome.tabs.sendMessage(sender.tab.id, msg)
+
 	}
 	else{
 		console.log('Unknown request');
 	}
 }
+
 
 
 function linkStatus(url){ // Check the status of the contribution and return it.
@@ -85,3 +87,4 @@ function linkModerator(url){
 	})
 	return result;
 }
+
