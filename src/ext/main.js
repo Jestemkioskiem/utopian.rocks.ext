@@ -43,15 +43,16 @@ $(document).ready(function(){
 })
 
 function displayUtopianAids(url){
-	$('.ReplyEditor__body').after('<p id="utopian-tags">\
-	<strong>Select an Utopian-io category:</strong>\
+
+	$('.ReplyEditor__title').after('<p id="utopian-tags">\
+	<strong>Select an Utopian-io category:<br></strong>\
 	<butt id="analysis">analysis</butt>, <butt id="blog">blog</butt>, <butt id="bug-hunting">bug-hunting</butt>,\
 	<butt id="copywriting">copywriting</butt>, <butt id="development">development</butt>,\
 	<butt id="documentation">documentation</butt>, <butt id="graphics">graphics</butt>, <butt id="ideas">ideas</butt>,\
 	<butt id="social">social</butt>, <butt id="translations">translations</butt>, <butt id="tutorials">tutorials</butt>,\
 	<butt id="video-tutorials">video-tutorials</butt>, <butt id="task-requests">task-requests</butt>;</p>')
 	
-	$('#utopian-tags').after('<a href="https://utopian.io/guidelines/">Utopian Guidelines</a>')
+	$('#utopian-tags').after('<a href="https://utopian.io/guidelines/" id="utopian-guidelines">Utopian Guidelines</a>')
 
 	$('body').append('<div id="templateOverwriteModal" class="modal"><div class="modal-content">\
 		<p>You\'re about to overwrite your changes with an Utopian Template.<br> Are you sure you want to continue?</p>\
@@ -68,8 +69,8 @@ function displayUtopianAids(url){
 	   	loadTemplateModal(this.textContent);
    	})
     
-    $('button[tabindex="4"]').before('<butt class="utopian-button" id="utopian-submit"><span title="Post with Utopian">\
-       <strong>Post with Utopian</strong></span></butt><br>')
+    $('button[tabindex="4"]').after('<butt class="utopian-button" id="utopian-submit"><span title="Post with Utopian">\
+       <strong>Post with Utopian</strong></span></butt>')
 
     $('#utopian-submit').click(function(){
     	loadScModal();
