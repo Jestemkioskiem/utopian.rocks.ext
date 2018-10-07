@@ -1,4 +1,4 @@
-var sc2_api = sc2.Initialize({
+var sc2_api = sc2.Initialize({ // Initialize SteemConnect
 	app: 'utopian-ext.app',
 	callbackURL: 'https://join.utopian.io/',
 	scope: ['comment','comment_options','custom_json','vote']
@@ -7,7 +7,7 @@ window.auth_link = sc2_api.getLoginURL()
 
 $(document).ready(function(){
 
-    let interval = setInterval(function(){
+    let interval = setInterval(function(){ // Ensures the extension always loads.
 	  	if(window.location.href === "https://steemit.com/submit.html"){
 	  		displayUtopianAids();
 	  		clearInterval(interval);
@@ -16,10 +16,10 @@ $(document).ready(function(){
 
 	chrome.runtime.onMessage.addListener(msgReceived); // Message listener
 		function msgReceived(message, sender, sendResponse){
-			if(message.request === "status"){ // Check what the purpose of the message is.
-				displayStatus(message) // placeholder function
+			if(message.request === "status"){ // Information about the status of the post
+				displayStatus(message)
 			}
-			else if(message.request === "broadcast"){
+			else if(message.request === "broadcast"){ // Request to broadcast a post
 
 				chrome.storage.local.get(function(result){
 					submitPost(result.content, result.sc2_token)
@@ -29,13 +29,13 @@ $(document).ready(function(){
 				console.log("Unknown request")
 			}
 		}
-
+	// Loads in additional CSS & HTML into the steemit DOM.
 	$('head').append(`<link rel="stylesheet" type="text/css" href="${chrome.extension.getURL('src/ext/style.css')}">`)
 	$('body').append(`<script type="text/javascript" src="${chrome.extension.getURL('src/third_party/jquery.js')}"></script>\
 					  <script src="https://cdn.jsdelivr.net/npm/steemconnect@latest"></script>`)
 
 	if(window.location.href.includes('?access_token=')){
-		chrome.runtime.sendMessage({ // Send a request for the status of the contribution.
+		chrome.runtime.sendMessage({ // Sends the request to load the token to cache to the background script (security).
 			request: "token"
 		})
 	}
@@ -46,7 +46,7 @@ $(document).ready(function(){
 	}
 })
 
-function displayUtopianAids(){
+function displayUtopianAids(){ // Adds all the HTML &.click() event listeners.
 
 	$('.ReplyEditor__title').after('<p id="utopian-tags">\
 	<strong>Select an Utopian-io category:<br></strong>\
@@ -80,7 +80,7 @@ function displayUtopianAids(){
     })
 }
 
-function loadTemplateModal(category){
+function loadTemplateModal(category){ // Loads in a template override pop-up modal
 	if($('.dropzone textarea')[0].value === ""){
 		forceTemplateHTML();
 	}
@@ -88,17 +88,18 @@ function loadTemplateModal(category){
 		let modal = $('#templateOverwriteModal');
 		modal.show()
 
+		// Actions based on which button is pressed (Yes/No)
 		$('#templateOverwriteNo').click(function(){
 			modal.hide();
 		})
-		$('#templateOverwriteYes').click(function(){
+		$('#templateOverwriteYes').click(function(){ 
 			modal.hide();
 			forceTemplateHTML();
 		})
 
 	}
 
-	function forceTemplateHTML(){
+	function forceTemplateHTML(){ // Replaces the tags & body with template's
 		$.get(chrome.extension.getURL(`src/third_party/templates/${category}`), function(data){
 			$('.dropzone textarea')[0].value = data;
 			$('input[name=category]')[0].value = `utopian-io ${category}`
@@ -106,28 +107,28 @@ function loadTemplateModal(category){
 	}
 }
 
-function loadScModal(){
+function loadScModal(){ // Loads in a SC warning pop-up modal
 	let modal = $('#steemConnectModal');
 	modal.show()
 
+	// Actions based on which button is pressed (Yes/No)
 	$('#scModalNo').click(function(){
 		modal.hide();
 	})
 
 	$('#scModalYes').click(function(){
-		let temp = gatherPostContent()
-		if(temp){
+		if(gatherPostContent()){
 			window.location.href = window.auth_link
 		}
 		else(
 			alert("Your Title, Body or Tags are empty!")
 		)
 
-		chrome.storage.local.set({content : gatherPostContent()})
+		chrome.storage.local.set({content : gatherPostContent()}) // Stores the post content in browser cache
 	})
 }
 
-function gatherPostContent(){
+function gatherPostContent(){ // Returns contents of the post necessary for broadcast
 	let post = {
 		title: $('.ReplyEditor__title')[0].value,
 		body: $('.dropzone textarea')[0].value,
@@ -137,14 +138,14 @@ function gatherPostContent(){
 	}
 
 	if(post.body === "" || !post.tags === "" || post.title === ""){
-		return false;
+		return false; // Returns false if the post can't be broadcasted due to missing values
 	}
 	else{
 		return post;
 	}
 }
 
-function displayStatus(message){ //placeholder function
+function displayStatus(message){ // Displays the status of the post using steemrocks' API
 	if(message.status !== undefined){
 
 		$('.PostFull__footer').prepend('<div class="utopian-rocks"></div>')
@@ -173,21 +174,20 @@ function displayStatus(message){ //placeholder function
 
 function submitPost(content, token){
 	sc2_api.setAccessToken(token)
+	chrome.storage.local.clear() // Remove post content & token from storage (safety purposes)
 
-	sc2_api.me(function (err, user) {
+	sc2_api.me(function (err, user) { // Set up & broadcast the comment
   		let permlink = content.title.toLowerCase()
 		.replace(/ /g,'-')
     	.replace(/[^\w-]+/g,'');
-
-
 	    let tags = content.tags.split(' ')
 	    let title = content.title;
 	    let body = content.body;
 	    let sbd_percent = 10000;
 	    let maximumAcceptedPayout = '100000.000 SBD';
-
+	   
 	    let beneficiaries = []
-	    if(tags[1] === 'translations'){
+	    if(tags[1] === 'translations'){ // Checks if the category is Translations
 	    	beneficiaries.push({
 	    		account:'utopian.pay',
 	    		weight: 100*5
@@ -205,7 +205,7 @@ function submitPost(content, token){
 	    }
 
 
-		let operations = [
+		let operations = [ // Set up the comment
 			['comment',
 	      	{
 		        parent_author: '',  
@@ -231,12 +231,13 @@ function submitPost(content, token){
 		    }]
 		];
 
-		sc2_api.broadcast(operations, function(err, res){
+		sc2_api.broadcast(operations, function(err, res){ // Broadcast the transaction
 			console.log(err, res)
 			if(err){
-				alert("There was issue with submitting your contribution:\nYour post needs an unique title you haven't used before.")
+				alert("There was issue with submitting your contribution:\n\
+					  Your post needs an unique title you haven't used before.")
 			}
-			window.location = "https://steemit.com/@"+user.name+"/"+permlink
+			window.location = "https://steemit.com/@"+user.name+"/"+permlink // Redirect user to his post
 		})
 
 	});
