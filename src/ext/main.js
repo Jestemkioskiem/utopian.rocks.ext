@@ -1,7 +1,7 @@
 var sc2_api = sc2.Initialize({ // Initialize SteemConnect
 	app: 'utopian-ext.app',
 	callbackURL: 'https://join.utopian.io/',
-	scope: ['comment','comment_options','custom_json','vote']
+	scope: ['comment','comment_options']
 });
 window.auth_link = sc2_api.getLoginURL()
 
