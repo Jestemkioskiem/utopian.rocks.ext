@@ -7,6 +7,13 @@ window.auth_link = sc2_api.getLoginURL()
 
 $(document).ready(function(){
 
+    let interval = setInterval(function(){
+	  	if(window.location.href === "https://steemit.com/submit.html"){
+	  		displayUtopianAids();
+	  		clearInterval(interval);
+	  	}
+    }, 2000); // 2000 ms = start after 2sec 
+
 	chrome.runtime.onMessage.addListener(msgReceived); // Message listener
 		function msgReceived(message, sender, sendResponse){
 			if(message.request === "status"){ // Check what the purpose of the message is.
@@ -20,10 +27,6 @@ $(document).ready(function(){
 			}
 			else{
 				console.log("Unknown request")
-			}
-
-			if(message.url === "https://steemit.com/submit.html"){
-				displayUtopianAids()
 			}
 		}
 
