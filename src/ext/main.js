@@ -55,12 +55,12 @@ function displayUtopianAids(url){
 
 	$('body').append('<div id="templateOverwriteModal" class="modal"><div class="modal-content">\
 		<p>You\'re about to overwrite your changes with an Utopian Template.<br> Are you sure you want to continue?</p>\
-		<button id="templateOverwriteYes">Yes</button> <button id="templateOverwriteNo">No</button>')
+		<butt id="templateOverwriteYes">Yes</butt> <butt id="templateOverwriteNo">No</butt>')
 
 	$('body').append('<div id="steemConnectModal" class="modal"><div class="modal-content">\
 		<p>You\'re about to leave this page to sing in with SteemConnect.<br>\
 		Your draft will be saved by steemit.com and your post will be published by Utopian.<br><br>Are you sure you want to continue?</p>\
-		<button id="scModalYes">Yes</button> <button id="scModalNo">No</button>')
+		<butt id="scModalYes">Yes</butt> <butt id="scModalNo">No</butt>')
 
 	$('#analysis, #blog, #bug-hunting, #copywriting, #development, #documentation, #graphics, #ideas, #social, #translations, \
    	   #tutorials, #video-tutorials, #task-requests').click(function(){
@@ -194,8 +194,6 @@ function submitPost(content, token){
 	      	{
 		        parent_author: '',  
 		        parent_permlink: tags[0],
-		        /* ^ I managed to narrow down the issue to parent_author and/or parent_permlink. 
-		        If you set them up for a comment instead of a post the broadcast goes through */
 		        author: user.name,
 		        permlink: permlink,
 		        title: title,
@@ -223,6 +221,9 @@ function submitPost(content, token){
 
 		sc2_api.broadcast(operations, function(err, res){
 			console.log(err, res)
+			if(err){
+				alert("There was issue with submitting your contribution:\nYour post needs an unique title you haven't used before.")
+			}
 		})
 	});
 }

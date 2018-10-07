@@ -1,10 +1,10 @@
 .utopian-rocks{
-	padding-left: 10px;
-	width: 100%;
+    padding-left: 10px;
+    width: 100%;
 }
 
 .utopian-rocks p, .utopian-rocks img{
-	display: inline-block;
+    display: inline-block;
 }
 
 .utopian-button{
@@ -29,22 +29,22 @@
 }
 
 #status-icon{
-	height: 64px;
-	width: 64px;
+    height: 64px;
+    width: 64px;
 }
 
 #utopian-tags{
-	margin: 5px 0px 5px 0px;
+    margin: 5px 0px 5px 0px;
 }
 
 #utopian-tags, #utopian-tags butt{
-	color: rgba(90,90,90,0.5);
-	font-size: 1.1em;
+    color: rgba(90,90,90,0.5);
+    font-size: 1.1em;
 }
 
 #utopian-tags butt{
-	margin: 0 !important;
-	text-transform: none;
+    margin: 0 !important;
+    text-transform: none;
 }
 
 #utopian-submit{
@@ -67,7 +67,7 @@
 }
 
 .modal-content {
-	text-align: center;
+    text-align: center;
     background-color: rgba(220,220,220,0.9);
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
@@ -76,6 +76,11 @@
 }
 
 .modal-content butt:hover, #utopian-tags butt:hover{
-	font-weight: bold;
-	text-decoration: underline;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.modal-content butt{
+    margin: 0px 7px 0px 7px;
+    cursor: pointer;
 }
