@@ -6,6 +6,7 @@ var sc2_api = sc2.Initialize({
 window.auth_link = sc2_api.getLoginURL()
 
 $(document).ready(function(){
+
 	chrome.runtime.onMessage.addListener(msgReceived); // Message listener
 		function msgReceived(message, sender, sendResponse){
 			if(message.request === "status"){ // Check what the purpose of the message is.
@@ -22,7 +23,7 @@ $(document).ready(function(){
 			}
 
 			if(message.url === "https://steemit.com/submit.html"){
-				displayUtopianAids(message.url)
+				displayUtopianAids()
 			}
 		}
 
@@ -42,7 +43,7 @@ $(document).ready(function(){
 	}
 })
 
-function displayUtopianAids(url){
+function displayUtopianAids(){
 
 	$('.ReplyEditor__title').after('<p id="utopian-tags">\
 	<strong>Select an Utopian-io category:<br></strong>\
@@ -65,7 +66,6 @@ function displayUtopianAids(url){
 
 	$('#analysis, #blog, #bug-hunting, #copywriting, #development, #documentation, #graphics, #ideas, #social, #translations, \
    	   #tutorials, #video-tutorials, #task-requests').click(function(){
-   	   	console.log(this.textContent);
 	   	loadTemplateModal(this.textContent);
    	})
     
@@ -142,7 +142,6 @@ function gatherPostContent(){
 }
 
 function displayStatus(message){ //placeholder function
-	console.log(message)
 	if(message.status !== undefined){
 
 		$('.PostFull__footer').prepend('<div class="utopian-rocks"></div>')
