@@ -192,8 +192,10 @@ function submitPost(content, token){
 		let operations = [
 			['comment',
 	      	{
-		        parent_author: '',
+		        parent_author: '',  
 		        parent_permlink: tags[0],
+		        /* ^ I managed to narrow down the issue to parent_author and/or parent_permlink. 
+		        If you set them up for a comment instead of a post the broadcast goes through */
 		        author: user.name,
 		        permlink: permlink,
 		        title: title,
@@ -221,6 +223,6 @@ function submitPost(content, token){
 
 		sc2_api.broadcast(operations, function(err, res){
 			console.log(err, res)
-		}
+		})
 	});
 }
