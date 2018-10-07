@@ -131,7 +131,7 @@ function gatherPostContent(){
 	let post = {
 		title: $('.ReplyEditor__title')[0].value,
 		body: $('.dropzone textarea')[0].value,
-		tags: $('input[name=category]')[0].value//,
+		tags: $('input[name=category]')[0].value
 		//tip: 
 
 	}
@@ -187,10 +187,23 @@ function submitPost(content, token){
 	    let maximumAcceptedPayout = '100000.000 SBD';
 
 	    let beneficiaries = []
-	    beneficiaries.push({
-	    	account:'utopian.pay',
-	    	weight: 100*5
-		})
+	    if(tags[1] === 'translations'){
+	    	beneficiaries.push({
+	    		account:'utopian.pay',
+	    		weight: 100*5
+			})
+	    	beneficiaries.push({
+	    		account:'davinci.pay',
+	    		weight: 100*10
+			})
+	    }
+	    else{
+	    	beneficiaries.push({
+	    		account:'utopian.pay',
+	    		weight: 100*5
+			})
+	    }
+
 
 		let operations = [
 			['comment',
@@ -214,11 +227,7 @@ function submitPost(content, token){
 		        percent_steem_dollars: parseInt(sbd_percent),
 		        allow_votes: true,
 		        allow_curation_rewards: true,
-		        extensions: [
-		        [0, {
-		          beneficiaries: beneficiaries
-		        }]
-		        ]
+		        extensions: [[0, {beneficiaries: beneficiaries}]]
 		    }]
 		];
 
@@ -227,6 +236,8 @@ function submitPost(content, token){
 			if(err){
 				alert("There was issue with submitting your contribution:\nYour post needs an unique title you haven't used before.")
 			}
+			window.location = "https://steemit.com/@"+user.name+"/"+permlink
 		})
+
 	});
 }

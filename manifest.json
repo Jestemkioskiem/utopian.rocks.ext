@@ -2,7 +2,7 @@
   "manifest_version": 2,
  
   "name": "Utopian",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An easy solution for posting to Utopian from the steemit interface.",
   "web_accessible_resources": ["src/*"],
   "content_security_policy": "connect-src 'self' *; script-src 'self' 'unsafe-eval' https://widget.blocktrades.us/ ; object-src 'self'; child-src 'unsafe-eval' 'self' https://widget.blocktrades.us/",
