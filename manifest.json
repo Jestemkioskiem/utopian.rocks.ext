@@ -1,6 +1,13 @@
 {
   "manifest_version": 2,
- 
+  
+  "applications": {
+    "gecko": {
+      "id": "utopian.rocks",
+      "strict_min_version": "42.0"
+    }
+  },
+
   "name": "Utopian",
   "version": "1.1.1",
   "description": "An easy solution for posting to Utopian from the steemit interface.",
